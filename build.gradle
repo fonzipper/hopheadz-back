@@ -54,7 +54,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
 
-task stage(dependsOn: ["clean", "wrapper"])
+task stage(dependsOn: ["clean", "installApp"])
 
 springBoot {
     mainClass = 'com.hopheadz.ApplicationKt'
