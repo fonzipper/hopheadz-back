@@ -1,1 +1,1 @@
-web: ./classes/main/hopheadz/ApplicationKt
+web: ./build/classes/main/hopheadz/ApplicationKt
