@@ -54,7 +54,7 @@ dependencies {
     compile 'javax.persistence:persistence-api:1.0.2'
 }
 
-task stage(dependsOn: ['clean', 'installDist'])
+task stage(dependsOn: ['clean', 'installApp'])
 task cleanBootRun(dependsOn: ['clean', 'bootRun'])
 
 springBoot {
