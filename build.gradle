@@ -18,7 +18,7 @@ apply plugin: 'kotlin' // New
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 
-mainClassName = "com.hopheadz.Application"
+mainClassName = "com.hopheadz.ApplicationKt"
 applicationName = "app"
 
 task stage(dependsOn: ['clean', 'installApp'])
