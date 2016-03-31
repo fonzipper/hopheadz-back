@@ -1,1 +1,1 @@
-web: ./build/install/hopheadzServer/bin/hopheadzServer --server.port=$PORT
+web: java -Dserver.port=$PORT -jar  target/gs-rest-service-0.1.0.jar
