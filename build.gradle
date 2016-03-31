@@ -16,6 +16,12 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'kotlin' // New
 apply plugin: 'spring-boot'
+apply plugin: 'application'
+
+mainClassName = "com.hopheadz.Application"
+applicationName = "app"
+
+task stage(dependsOn: ['clean', 'installApp'])
 
 jar {
     baseName = 'gs-rest-service'
@@ -53,8 +59,6 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
-
-task stage(dependsOn: ["clean", "installApp"])
 
 springBoot {
     mainClass = 'com.hopheadz.ApplicationKt'
