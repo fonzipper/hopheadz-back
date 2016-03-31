@@ -1,1 +1,1 @@
-web: ./build/install/app/bin/app
+web: ./build/install/hopheadzServer/bin/hopheadzServer --server.port=$PORT

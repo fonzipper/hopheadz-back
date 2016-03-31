@@ -19,9 +19,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'application'
 
 mainClassName = "com.hopheadz.ApplicationKt"
-applicationName = "app"
-
-task stage(dependsOn: ['clean', 'installApp'])
+applicationName = "hopheadzServer"
 
 jar {
     baseName = 'gs-rest-service'
@@ -45,7 +43,7 @@ sourceSets {
             srcDir "test/main/kotlin"
         }
     }
-    main.java.srcDirs += 'src/main/kotlin'
+//    main.java.srcDirs += 'src/main/kotlin'
 }
 
 dependencies {
@@ -56,9 +54,8 @@ dependencies {
     compile 'javax.persistence:persistence-api:1.0.2'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
-}
+task stage(dependsOn: ['clean', 'installDist'])
+task cleanBootRun(dependsOn: ['clean', 'bootRun'])
 
 springBoot {
     mainClass = 'com.hopheadz.ApplicationKt'
