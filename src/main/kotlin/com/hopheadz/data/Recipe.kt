@@ -1,45 +1,24 @@
 package com.hopheadz.data
 
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import org.joda.time.DateTime
+import java.math.BigDecimal
 
 /**
  * Created by NS on 31/03/16.
  */
 
 data class Recipe(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO)
-        val Id: Long = 0,
-        val style: Style = Style(id = 0,
-                name = "",
-                maxABV = 0f,
-                minABV = 0f,
-                maxBitterness = 0f,
-                minBitterness = 0f,
-                maxColor = 0f,
-                minColor = 0f,
-                maxGravity = 0f,
-                minGravity = 0f),
+        val style: Style? = null,
         val volume: Float = 0f,
-        val malts: Array<Malt> = arrayOf(Malt(
-                id = 0,
-                name = "",
-                country = "",
-                color = 0f,
-                efficiency = 0f,
-                fermentability = 0f,
-                description = "")),
-        val hops: Array<Hop> = arrayOf(Hop(
-                id = 0,
-                name = "",
-                country = "",
-                alpha = 0f,
-                desciption = ""
-        )),
+        val malts: Array<Malt>? = null,
+        val hops: Array<Hop>? = null,
+        var yeasts: Array<Yeast>? = null,
         val gravity: Float = 0f,
         val color: Float = 0f,
         val bitterness: Float = 0f,
         val abv: Float = 0f,
-        val efficiency: Float = 0f
+        val efficiency: Float = 0f,
+        val authorID: String = "",
+        val created: DateTime = DateTime.now(),
+        val isPublic: Boolean = true
 )

@@ -1,43 +1,57 @@
 package com.hopheadz.controller
 
-import com.hopheadz.data.Greeting
+import com.hopheadz.data.Hop
 import com.hopheadz.data.Malt
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.atomic.AtomicLong
+import com.hopheadz.data.Style
+import com.hopheadz.data.Yeast
+import com.hopheadz.repository.IngredientRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
 
 /**
  * Created by NS on 30/03/16.
  */
-
+@CrossOrigin(origins = arrayOf("*"))
 @RestController
-class HopheadzRESTController {
-
-    val counter = AtomicLong()
+class HopheadzRESTController @Autowired constructor(val iRepo: IngredientRepository) {
 
     @RequestMapping(value = "/malt", method = arrayOf(RequestMethod.GET))
     fun getMalt(): Array<Malt> {
-        System.out.println("Malts requested")
-        return arrayOf(Malt(
-                id = 1,
-                name = "Pale ale",
-                country = "Belgium",
-                color = 8f,
-                efficiency = 37f,
-                fermentability = 0.85f,
-                description = "pale ale malt"
-        ),
-                Malt(
-                        id = 2,
-                        name = "Munich",
-                        country = "Belgium",
-                        color = 25f,
-                        efficiency = 37f,
-                        fermentability = 0.85f,
-                        description = "Munich malt"
-                )
-        )
+        return iRepo.findAllMalts()
+    }
+
+    @RequestMapping(value = "/malt", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/csv"))
+    fun uploadMalt(@RequestBody malts: String) {
+        iRepo.updloadMalts(malts)
+    }
+
+    @RequestMapping(value = "/hop", method = arrayOf(RequestMethod.GET))
+    fun getHop(): Array<Hop> {
+        return iRepo.findAllHops()
+    }
+
+    @RequestMapping(value = "/hop", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/csv"))
+    fun uploadHop(@RequestBody hops: String) {
+        return iRepo.uploadHops(hops)
+    }
+
+    @RequestMapping(value = "/yeast", method = arrayOf(RequestMethod.GET))
+    fun getYeast(): Array<Yeast> {
+        return iRepo.findAllYeasts()
+    }
+
+    @RequestMapping(value = "/yeast", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/csv"))
+    fun uploadYeast(@RequestBody yeasts: String) {
+        return iRepo.uploadYeasts(yeasts)
+    }
+
+    @RequestMapping(value = "/style", method = arrayOf(RequestMethod.GET))
+    fun getStyle(): Array<Style> {
+        return iRepo.findAllStyles()
+    }
+
+    @RequestMapping(value = "/style", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/csv"))
+    fun uploadStyle(@RequestBody yeast: String) {
+        return iRepo.uploadYeasts(yeast)
     }
 }
