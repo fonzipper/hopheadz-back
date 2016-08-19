@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
  * Created by NS on 08/04/16.
  */
 
-open class IngredientRepository @Autowired constructor(var db: MongoDatabase, val serializer: Serializer) {
+open class IngredientRepository @Autowired constructor(val db: MongoDatabase, val serializer: Serializer) {
+
     fun findAllMalts() : Array<Malt> {
         var res = listOf<Malt>()
         db.getCollection("malts").find().distinct()
@@ -23,8 +24,8 @@ open class IngredientRepository @Autowired constructor(var db: MongoDatabase, va
         return res.toTypedArray()
     }
 
-    fun updloadMalts(csv: String) {
-        var uploadArray = serializer.parseCSV<Malt>(csv, Malt::class.java)
+    fun uploadMalts(csv: String){
+        val uploadArray = serializer.parseCSV(csv, Malt::class.java)
 
         if (uploadArray.size > 0)
             for (mmt in uploadArray)
@@ -42,7 +43,7 @@ open class IngredientRepository @Autowired constructor(var db: MongoDatabase, va
     }
 
     fun uploadHops(csv: String) {
-        var uploadArray = serializer.parseCSV<Hop>(csv, Hop::class.java)
+        val uploadArray = serializer.parseCSV(csv, Hop::class.java)
 
         if (uploadArray.size > 0)
             for (hp in uploadArray)
@@ -60,7 +61,7 @@ open class IngredientRepository @Autowired constructor(var db: MongoDatabase, va
     }
 
     fun uploadYeasts(csv: String) {
-        var uploadArray = serializer.parseCSV<Yeast>(csv, Yeast::class.java)
+        val uploadArray = serializer.parseCSV(csv, Yeast::class.java)
 
         if (uploadArray.size > 0)
             for (yt in uploadArray)
@@ -78,7 +79,7 @@ open class IngredientRepository @Autowired constructor(var db: MongoDatabase, va
     }
 
     fun uploadStyles(csv: String) {
-        var uploadArray = serializer.parseCSV<Style>(csv, Style::class.java)
+        val uploadArray = serializer.parseCSV(csv, Style::class.java)
 
         if (uploadArray.size > 0)
             for (st in uploadArray)

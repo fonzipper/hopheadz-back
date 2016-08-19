@@ -2,6 +2,7 @@ package com.hopheadz.util
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
+import org.joda.time.DateTime
 
 /**
  * Created by NS on 08/04/16.
@@ -11,22 +12,27 @@ open class Serializer() {
         var map : Map<String, Any>? = null
         entity.declaredFields.forEach { field ->
             field.isAccessible = true
-            map = map?.plus(field.name to field.get(obj)) ?: mapOf(field.name to field.get(obj))
+            when (field.type.name){
+                "org.joda.time.DateTime" -> map = map?.plus(field.name to field.get(obj).toString()) ?: mapOf(field.name to field.get(obj).toString())
+                else -> map = map?.plus(field.name to field.get(obj)) ?: mapOf(field.name to field.get(obj))
+            }
+
         }
         return map ?: mapOf()
     }
 
     fun <T>fromMap(map: Map<String, Any>, entity: Class<T>) : T {
-        var obj = entity.newInstance()
+        val obj = entity.newInstance()
 
         entity.declaredFields.forEach { field ->
             field.isAccessible = true
             when (field.type.name){
-                "float" -> field.set(obj, map.get(field.name).toString().toFloat())
-                "int" -> field.set(obj, map.get(field.name).toString().toInt())
-                else -> field.set(obj, field.type.cast(map.get(field.name)))
+                "float" -> field.set(obj, map[field.name].toString().toFloat())
+                "int" -> field.set(obj, map[field.name].toString().toInt())
+                "boolean" -> field.set(obj, map[field.name].toString() == "true")
+                "org.joda.time.DateTime" -> field.set(obj, DateTime.parse(map[field.name].toString()))
+                else -> field.set(obj, field.type.cast(map[field.name]))
             }
-
         }
 
         return obj

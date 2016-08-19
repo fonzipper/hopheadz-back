@@ -20,9 +20,9 @@ class HopheadzRESTController @Autowired constructor(val iRepo: IngredientReposit
         return iRepo.findAllMalts()
     }
 
-    @RequestMapping(value = "/malt", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/csv"))
+    @RequestMapping(value = "/malt", method = arrayOf(RequestMethod.POST), consumes = arrayOf("*/*"))
     fun uploadMalt(@RequestBody malts: String) {
-        iRepo.updloadMalts(malts)
+        iRepo.uploadMalts(malts)
     }
 
     @RequestMapping(value = "/hop", method = arrayOf(RequestMethod.GET))
@@ -52,6 +52,6 @@ class HopheadzRESTController @Autowired constructor(val iRepo: IngredientReposit
 
     @RequestMapping(value = "/style", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/csv"))
     fun uploadStyle(@RequestBody yeast: String) {
-        return iRepo.uploadYeasts(yeast)
+        return iRepo.uploadStyles(yeast)
     }
 }
