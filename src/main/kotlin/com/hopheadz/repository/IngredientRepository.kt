@@ -10,7 +10,7 @@ import org.bson.Document
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
- * Created by NS on 08/04/16.
+ * Created by NS on 08/04/16
  */
 
 open class IngredientRepository @Autowired constructor(val db: MongoDatabase, val serializer: Serializer) {
@@ -85,5 +85,23 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
             for (st in uploadArray)
                 if (st.name != "") db.getCollection("styles")
                         .insertOne(Document(serializer.toMap(st, Style::class.java)))
+    }
+
+    fun findAllRecipes(id: String?) : Array<String> {
+        var res =  listOf<String>()
+        var lookup = "{}"
+        if (id != null) lookup = "{\"_id\" : { \"\$oid\" : \"$id\"}}"
+        val doc = Document.parse(lookup)
+        db.getCollection("recipes").find(doc).distinct()
+                .forEach { it ->
+                    res = res.plus(it.toJson())
+                }
+        return res.toTypedArray()
+    }
+
+    fun insertRecipe(recipe: String) : String {
+        val rcp = Document.parse(recipe)
+        db.getCollection("recipes").insertOne(rcp)
+        return rcp.toJson()
     }
 }

@@ -54,4 +54,14 @@ class HopheadzRESTController @Autowired constructor(val iRepo: IngredientReposit
     fun uploadStyle(@RequestBody yeast: String) {
         return iRepo.uploadStyles(yeast)
     }
+
+    @RequestMapping(value = "/recipe", method = arrayOf(RequestMethod.GET))
+    fun getRecipe(@RequestParam(required = false) id: String?): Array<String> {
+        return iRepo.findAllRecipes(id)
+    }
+
+    @RequestMapping(value = "/recipe", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/json"))
+    fun uploadRecipe(@RequestBody recipe: String) : String {
+        return iRepo.insertRecipe(recipe)
+    }
 }
