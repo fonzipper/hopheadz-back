@@ -6,6 +6,7 @@ import com.hopheadz.data.Style
 import com.hopheadz.data.Yeast
 import com.hopheadz.util.Serializer
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -101,7 +102,9 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
 
     fun insertRecipe(recipe: String) : String {
         val rcp = Document.parse(recipe)
-        db.getCollection("recipes").insertOne(rcp)
+        val opts = UpdateOptions()
+        opts.upsert(true)
+        db.getCollection("recipes").updateOne(rcp, rcp, opts)
         return rcp.toJson()
     }
 }
