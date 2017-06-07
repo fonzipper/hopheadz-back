@@ -28,3 +28,4 @@ api/
 .idea
 *.iml
 conf/application.properties
+conf/application.yml
