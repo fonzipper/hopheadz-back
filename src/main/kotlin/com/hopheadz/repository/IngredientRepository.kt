@@ -102,6 +102,7 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
 
     fun insertRecipe(recipe: String) : String {
         val rcp = Document.parse(recipe)
+        println("recipe ID: " + rcp.get("_id"))
         val opts = UpdateOptions()
         opts.upsert(true)
         db.getCollection("recipes").updateOne(rcp.get("_id", Document::class.java), rcp, opts)
