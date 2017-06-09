@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
  * Created by NS on 08/04/16
  */
 
+@Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
 open class IngredientRepository @Autowired constructor(val db: MongoDatabase, val serializer: Serializer) {
 
     fun findAllMalts() : Array<Malt> {
@@ -102,10 +103,17 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
 
     fun insertRecipe(recipe: String) : String {
         val rcp = Document.parse(recipe)
-        println("recipe ID: " + rcp.get("_id"))
-        val opts = UpdateOptions()
-        opts.upsert(true)
-        db.getCollection("recipes").updateOne(rcp.get("_id", Document::class.java), rcp, opts)
+        val id: Any? = rcp["_id"]
+        var lookup = "{}"
+        if (id != null) {
+            lookup = "{\"_id\" : { \"\$oid\" : \"$id\"}}"
+            val doc = Document.parse(lookup)
+            val opts = UpdateOptions()
+            opts.upsert(true)
+            db.getCollection("recipes").replaceOne(doc, rcp, opts)
+        } else {
+            db.getCollection("recipes").insertOne(rcp)
+        }
         return rcp.toJson()
     }
 }
