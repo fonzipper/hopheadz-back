@@ -1,15 +1,20 @@
 package com.hopheadz
 
+import com.auth0.spring.security.api.JwtWebSecurityConfigurer
 import com.hopheadz.repository.IngredientRepository
 import com.hopheadz.util.Serializer
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
+import org.springframework.context.annotation.PropertySource
+import org.springframework.http.HttpMethod
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
@@ -20,9 +25,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
 open class Application {
-
-//    @Autowired
-//    lateinit var connection: ConnectionConfig
 
     @Bean open fun uri() = MongoClientURI(System.getenv("MONGODB_URI"))
 
@@ -46,13 +48,29 @@ open class WebConfig: WebMvcConfigurerAdapter(){
     }
 }
 
-@Component
-@ConfigurationProperties(prefix = "mongo.database")
-open class ConnectionConfig {
-    lateinit var host: String
-    lateinit var port: Number
-    lateinit var dbname: String
-    lateinit var dbuser: String
-    lateinit var password: CharArray
-    lateinit var uri: String
+@Configuration
+@EnableWebSecurity(debug = true)
+@PropertySource(value = "auth0.yml")
+open class AuthConfig: WebSecurityConfigurerAdapter() {
+    @Value(value = "\${auth0.issuer}")
+    lateinit var issuer: String
+
+    @Value(value = "\${auth0.apiAudience}")
+    lateinit var apiAudience: String
+
+    @Override
+    override fun configure(http: HttpSecurity?) {
+        JwtWebSecurityConfigurer
+                .forRS256(apiAudience, issuer)
+                .configure(http)
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers(HttpMethod.GET, "/malt").permitAll()
+                .antMatchers(HttpMethod.GET, "/yeast").permitAll()
+                .antMatchers(HttpMethod.GET, "/style").permitAll()
+                .antMatchers(HttpMethod.GET, "/hop").permitAll()
+                .antMatchers(HttpMethod.GET, "/recipe").hasAuthority("read:recipe")
+                .antMatchers(HttpMethod.POST, "/recipe").hasAuthority("create:recipe")
+                .anyRequest().authenticated();
+    }
 }

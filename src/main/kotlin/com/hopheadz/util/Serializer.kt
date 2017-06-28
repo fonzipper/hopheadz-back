@@ -5,8 +5,9 @@ import org.apache.commons.csv.CSVParser
 import org.joda.time.DateTime
 
 /**
- * Created by NS on 08/04/16.
+ * Created by NS on 08/04/16
  */
+
 open class Serializer() {
     fun <T>toMap(obj: T, entity: Class<T>) : Map<String, Any> {
         var map : Map<String, Any>? = null

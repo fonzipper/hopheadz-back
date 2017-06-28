@@ -7,6 +7,7 @@ import com.hopheadz.data.Yeast
 import com.hopheadz.repository.IngredientRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.net.URLDecoder
 
 /**
  * Created by NS on 30/03/16.
@@ -56,8 +57,15 @@ class HopheadzRESTController @Autowired constructor(val iRepo: IngredientReposit
     }
 
     @RequestMapping(value = "/recipe", method = arrayOf(RequestMethod.GET))
-    fun getRecipe(@RequestParam(required = false) id: String?): Array<String> {
-        return iRepo.findAllRecipes(id)
+    fun getRecipe(@RequestParam(required = false) id: String?,
+                  @RequestParam(required = false) userId: String?)
+            : Array<String> {
+        var userIdDec = ""
+        if (userId != null) {
+            userIdDec = URLDecoder.decode(userId, "UTF-8")
+//            val u2 = Base64.
+        }
+        return iRepo.findAllRecipes(id, userIdDec)
     }
 
     @RequestMapping(value = "/recipe", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/json"))
