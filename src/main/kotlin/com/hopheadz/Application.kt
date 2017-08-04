@@ -71,6 +71,8 @@ open class AuthConfig: WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.GET, "/hop").permitAll()
                 .antMatchers(HttpMethod.GET, "/recipe").hasAuthority("read:recipe")
                 .antMatchers(HttpMethod.POST, "/recipe").hasAuthority("create:recipe")
+                .antMatchers(HttpMethod.GET, "/brew-setup").hasAuthority("create:brewsetup")
+                .antMatchers(HttpMethod.POST, "/brew-setup").hasAuthority("create:brewsetup")
                 .anyRequest().authenticated();
     }
 }

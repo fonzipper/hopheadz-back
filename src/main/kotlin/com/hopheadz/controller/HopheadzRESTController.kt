@@ -1,9 +1,6 @@
 package com.hopheadz.controller
 
-import com.hopheadz.data.Hop
-import com.hopheadz.data.Malt
-import com.hopheadz.data.Style
-import com.hopheadz.data.Yeast
+import com.hopheadz.data.*
 import com.hopheadz.repository.IngredientRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -71,5 +68,16 @@ class HopheadzRESTController @Autowired constructor(val iRepo: IngredientReposit
     @RequestMapping(value = "/recipe", method = arrayOf(RequestMethod.POST), consumes = arrayOf("text/json"))
     fun uploadRecipe(@RequestBody recipe: String) : String {
         return iRepo.insertRecipe(recipe)
+    }
+
+    @RequestMapping(value = "/brew-setup", method = arrayOf(RequestMethod.GET))
+    fun getBrewSetup(@RequestParam(required = true) userId: String) : BrewSetup {
+        val userIdDec = URLDecoder.decode(userId, "UTF-8")
+        return iRepo.getBrewSetup(userIdDec)
+    }
+
+    @RequestMapping(value = "/brew-setup", method = arrayOf(RequestMethod.POST))
+    fun saveBrewSetup(@RequestBody setup: String) : String {
+        return iRepo.saveBrewSetup(setup)
     }
 }

@@ -1,9 +1,6 @@
 package com.hopheadz.repository
 
-import com.hopheadz.data.Hop
-import com.hopheadz.data.Malt
-import com.hopheadz.data.Style
-import com.hopheadz.data.Yeast
+import com.hopheadz.data.*
 import com.hopheadz.util.Serializer
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.UpdateOptions
@@ -15,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
  * Created by NS on 08/04/16
  */
 
-@Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
+//@Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
 open class IngredientRepository @Autowired constructor(val db: MongoDatabase, val serializer: Serializer) {
 
     fun findAllMalts() : Array<Malt> {
@@ -129,5 +126,33 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
             db.getCollection("recipes").insertOne(rcp)
         }
         return rcp.toJson()
+    }
+
+    fun getBrewSetup(userId : String) : BrewSetup {
+        val ndoc = Document()
+        ndoc.append("owner", userId)
+
+        var res = BrewSetup()
+
+        db.getCollection("brew-setups").find(ndoc).distinct()
+                .forEach { it ->
+                    res = serializer.fromMap(it.toSortedMap(), BrewSetup::class.java)
+                }
+        return res
+    }
+
+    fun saveBrewSetup(brewSetup: String) : String {
+        val stp = Document.parse(brewSetup)
+        val id: Any? = stp["_id"]
+        val ndoc = Document()
+        if (id != null && id != "undefined") {
+            ndoc.append("_id", ObjectId(id.toString()))
+            val opts = UpdateOptions()
+            opts.upsert(true)
+            db.getCollection("brew-setups").replaceOne(ndoc, stp, opts)
+        } else {
+            db.getCollection("brew-setups").insertOne(stp)
+        }
+        return stp.toJson()
     }
 }
