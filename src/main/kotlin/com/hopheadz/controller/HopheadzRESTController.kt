@@ -71,7 +71,7 @@ class HopheadzRESTController @Autowired constructor(val iRepo: IngredientReposit
     }
 
     @RequestMapping(value = "/brew-setup", method = arrayOf(RequestMethod.GET))
-    fun getBrewSetup(@RequestParam(required = true) userId: String) : BrewSetup {
+    fun getBrewSetup(@RequestParam(required = true) userId: String) : BrewSetup? {
         val userIdDec = URLDecoder.decode(userId, "UTF-8")
         return iRepo.getBrewSetup(userIdDec)
     }

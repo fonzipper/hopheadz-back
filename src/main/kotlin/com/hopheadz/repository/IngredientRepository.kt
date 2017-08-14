@@ -128,11 +128,11 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
         return rcp.toJson()
     }
 
-    fun getBrewSetup(userId : String) : BrewSetup {
+    fun getBrewSetup(userId : String) : BrewSetup? {
         val ndoc = Document()
         ndoc.append("owner", userId)
 
-        var res = BrewSetup()
+        var res: BrewSetup? = null
 
         db.getCollection("brew-setups").find(ndoc).distinct()
                 .forEach { it ->

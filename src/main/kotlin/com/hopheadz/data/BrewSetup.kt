@@ -10,5 +10,6 @@ data class BrewSetup(
         val equipmentLoss: Float = 0f,
         val tunDeadSpaceVolume: Float = 0f,
         val spargeWaterTemperature: Float = 0f,
-        val mashEfficiency: Float = 0f
+        val mashEfficiency: Float = 0f,
+        val mashTunDeadSpace: Float = 0f
 )
