@@ -69,10 +69,13 @@ open class AuthConfig: WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.GET, "/yeast").permitAll()
                 .antMatchers(HttpMethod.GET, "/style").permitAll()
                 .antMatchers(HttpMethod.GET, "/hop").permitAll()
+                .antMatchers(HttpMethod.GET, "/mash-type").permitAll()
                 .antMatchers(HttpMethod.GET, "/recipe").hasAuthority("read:recipe")
                 .antMatchers(HttpMethod.POST, "/recipe").hasAuthority("create:recipe")
                 .antMatchers(HttpMethod.GET, "/brew-setup").hasAuthority("create:brewsetup")
                 .antMatchers(HttpMethod.POST, "/brew-setup").hasAuthority("create:brewsetup")
+                .antMatchers(HttpMethod.POST, "/mash-step").hasAuthority("create:brewsetup")
+                .antMatchers(HttpMethod.POST, "/mash-type").hasAuthority("create:brewsetup")
                 .anyRequest().authenticated();
     }
 }

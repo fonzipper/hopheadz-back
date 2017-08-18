@@ -155,4 +155,62 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
         }
         return stp.toJson()
     }
+
+    fun uploadMashSteps(csv: String) {
+        val uploadArray = serializer.parseCSV(csv, MashStep::class.java)
+
+        if (uploadArray.isNotEmpty())
+            uploadArray
+                    .filter { it.name != "" }
+                    .forEach {
+                        db.getCollection("mash-steps")
+                                .insertOne(Document(serializer.toMap(it, MashStep::class.java)))
+                    }
+    }
+
+    fun uploadMashTypes(csv: String) {
+        val uploadArray = serializer.parseCSV(csv, MashType::class.java)
+
+        if (uploadArray.isNotEmpty())
+            uploadArray
+                    .filter { it.name != "" }
+                    .forEach {
+                        db.getCollection("mash-types")
+                                .insertOne(Document(serializer.toMap(it, MashType::class.java)))
+                    }
+    }
+
+    fun findAllMashTypes() : Array<MashType> {
+        var res = listOf<MashType>()
+        var steps = mapOf<String, MashStep>()
+        db.getCollection("mash-steps").find().distinct()
+                .forEach { it ->
+                    val ms = serializer.fromMap(it.toSortedMap(), MashStep::class.java)
+                    steps = steps.plus(pair = Pair(ms.name, ms))
+                }
+
+        db.getCollection("mash-types").find().distinct()
+                .forEach { it ->
+                    res = res.plus(serializer.fromMap(it.toSortedMap(), MashType::class.java))
+                }
+
+        for (mt in res) {
+            mt.mashSteps = arrayOf()
+            val stepSeq = mt.mashSequence.split("%%")
+            var stepNumber = 1
+            for (st in stepSeq) {
+                val step: StepDescription = serializer.parseJsonObject(st, StepDescription::class.java)
+                val ms = steps[step.name]
+                if (ms != null) {
+                    ms.stepNumber = stepNumber
+                    ms.stepTemperature = step.temperature
+                    ms.time = step.time
+                    mt.mashSteps = mt.mashSteps.plus(ms)
+                    stepNumber++
+                }
+            }
+        }
+
+        return res.toTypedArray()
+    }
 }

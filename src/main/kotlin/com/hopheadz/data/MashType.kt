@@ -1,9 +1,11 @@
 package com.hopheadz.data
+import javax.persistence.Entity
 
-/**
- * Created by NS on 08/04/16.
- */
-//TODO: look for mash parameters
+@Entity
 data class MashType(
-        var name: String = ""
+        var name: String = "",
+        var grainTemperature: Float = 0f,
+        var description: String = "",
+        var mashSteps: Array<MashStep> = arrayOf(),
+        var mashSequence: String = ""
 )

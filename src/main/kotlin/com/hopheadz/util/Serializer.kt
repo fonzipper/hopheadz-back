@@ -1,5 +1,9 @@
 package com.hopheadz.util
 
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Parser
+import com.beust.klaxon.int
+import com.beust.klaxon.string
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.joda.time.DateTime
@@ -48,5 +52,25 @@ open class Serializer() {
             result = result.plus(this.fromMap(row.toMap(), entity))
         }
         return result
+    }
+
+    fun <T> parseJsonObject(json: String, entity: Class<T>) : T {
+        val parser = Parser().parse(StringBuilder(json)) as JsonObject
+        val obj = entity.newInstance()
+
+        entity.declaredFields.forEach { field ->
+            field.isAccessible = true
+            when (field.type.name){
+                "float" -> {
+                    val value = parser.int(field.name)
+                    field.set(obj, value?.toFloat())
+                }
+                "int" -> field.set(obj, parser.int(field.name))
+                "org.joda.time.DateTime" -> field.set(obj, DateTime.parse(parser.string(field.name)))
+                else -> field.set(obj, field.type.cast(parser.string(field.name)))
+            }
+        }
+
+        return obj
     }
 }
