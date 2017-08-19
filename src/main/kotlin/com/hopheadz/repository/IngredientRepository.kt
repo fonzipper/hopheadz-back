@@ -209,6 +209,7 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
                     ms.stepNumber = stepNumber
                     ms.stepTemperature = step.temperature
                     ms.time = step.time
+                    ms.ratio = step.ratio
                     mt.mashSteps = mt.mashSteps.plus(ms)
                     stepNumber++
                 }
