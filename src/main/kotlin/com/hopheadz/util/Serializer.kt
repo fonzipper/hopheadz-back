@@ -1,9 +1,6 @@
 package com.hopheadz.util
 
-import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
-import com.beust.klaxon.int
-import com.beust.klaxon.string
+import com.beust.klaxon.*
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.joda.time.DateTime
@@ -34,7 +31,7 @@ open class Serializer() {
             when (field.type.name){
                 "float" -> field.set(obj, map[field.name].toString().toFloat())
                 "int" -> field.set(obj, map[field.name].toString().toInt())
-                "boolean" -> field.set(obj, map[field.name].toString() == "true")
+                "boolean" -> field.set(obj, map[field.name].toString().toLowerCase() == "true")
                 "org.joda.time.DateTime" -> field.set(obj, DateTime.parse(map[field.name].toString()))
                 else -> field.set(obj, field.type.cast(map[field.name]))
             }
@@ -62,11 +59,12 @@ open class Serializer() {
             field.isAccessible = true
             when (field.type.name){
                 "float" -> {
-                    val value = parser.int(field.name)
-                    field.set(obj, value?.toFloat())
+                    val value = parser.get(field.name).toString()
+                    field.set(obj, value.toFloat())
                 }
                 "int" -> field.set(obj, parser.int(field.name))
                 "org.joda.time.DateTime" -> field.set(obj, DateTime.parse(parser.string(field.name)))
+                "boolean" -> field.set(obj, parser.boolean(field.name))
                 else -> field.set(obj, field.type.cast(parser.string(field.name)))
             }
         }

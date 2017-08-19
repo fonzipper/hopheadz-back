@@ -13,4 +13,13 @@ data class MashStep (
     var stepTemperature: Float = 0f,
     var time: Int = 0,
     var ratio: Float = 0f
-)
+) {
+    fun clone() : MashStep {
+        val ms = MashStep()
+        for (fld in MashStep::class.java.declaredFields) {
+            fld.set(ms, fld.get(this))
+        }
+
+        return ms
+    }
+}

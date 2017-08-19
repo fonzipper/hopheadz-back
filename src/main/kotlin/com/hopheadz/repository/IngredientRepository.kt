@@ -94,6 +94,10 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
             uploadArray
                     .filter { it.name != "" }
                     .forEach {
+                        it.minColor = Math.round(it.minColor * 1.97f).toFloat()
+                        it.maxColor = Math.round(it.maxColor * 1.97f).toFloat()
+                        it.minGravity = (it.minGravity - 1000) / 4
+                        it.maxGravity = (it.maxGravity - 1000) / 4
                         db.getCollection("styles")
                                 .insertOne(Document(serializer.toMap(it, Style::class.java)))
                     }
@@ -200,7 +204,7 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
             var stepNumber = 1
             for (st in stepSeq) {
                 val step: StepDescription = serializer.parseJsonObject(st, StepDescription::class.java)
-                val ms = steps[step.name]
+                val ms = steps[step.name]?.clone()
                 if (ms != null) {
                     ms.stepNumber = stepNumber
                     ms.stepTemperature = step.temperature

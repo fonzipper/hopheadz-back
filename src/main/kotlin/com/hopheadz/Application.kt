@@ -74,8 +74,12 @@ open class AuthConfig: WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.POST, "/recipe").hasAuthority("create:recipe")
                 .antMatchers(HttpMethod.GET, "/brew-setup").hasAuthority("create:brewsetup")
                 .antMatchers(HttpMethod.POST, "/brew-setup").hasAuthority("create:brewsetup")
-                .antMatchers(HttpMethod.POST, "/mash-step").hasAuthority("create:brewsetup")
-                .antMatchers(HttpMethod.POST, "/mash-type").hasAuthority("create:brewsetup")
-                .anyRequest().authenticated();
+//                .antMatchers(HttpMethod.POST, "/mash-step").hasAuthority("create:brewsetup")
+//                .antMatchers(HttpMethod.POST, "/mash-type").hasAuthority("create:brewsetup")
+//                .antMatchers(HttpMethod.POST, "/malt").hasAuthority("create:brewsetup")
+//                .antMatchers(HttpMethod.POST, "/yeast").hasAuthority("create:brewsetup")
+//                .antMatchers(HttpMethod.POST, "/hop").hasAuthority("create:brewsetup")
+//                .antMatchers(HttpMethod.POST, "/style").hasAuthority("create:brewsetup")
+                .anyRequest().authenticated()
     }
 }
