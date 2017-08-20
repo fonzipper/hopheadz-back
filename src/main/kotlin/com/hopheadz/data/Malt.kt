@@ -10,5 +10,5 @@ data class Malt(
         var description: String = "",
         var needMash: Boolean = true,
         var type: String = "",
-        var fermenatble: Boolean = true
+        var fermentable: Boolean = true
 )
