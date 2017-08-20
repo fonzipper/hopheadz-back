@@ -8,5 +8,7 @@ data class Malt(
         var color: Float = 0F,
         var efficiency: Int = 0,
         var description: String = "",
-        var needMash: Boolean = true
+        var needMash: Boolean = true,
+        var type: String = "",
+        var fermenatble: Boolean = true
 )
