@@ -7,8 +7,9 @@ import org.joda.time.DateTime
  */
 
 data class Yeast(
-        val name: String = "",
-        val country: String = "",
-        val productionDate: DateTime = DateTime.now(),
-        val isLiquid: Boolean = false
+        var name: String = "",
+        var manufacturer: String = "",
+        var country: String = "",
+        var productionDate: DateTime = DateTime.now(),
+        var isLiquid: Boolean = false
 )

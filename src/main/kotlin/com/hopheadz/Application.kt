@@ -69,6 +69,7 @@ open class AuthConfig: WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.GET, "/yeast").permitAll()
                 .antMatchers(HttpMethod.GET, "/style").permitAll()
                 .antMatchers(HttpMethod.GET, "/hop").permitAll()
+                .antMatchers(HttpMethod.GET, "/misc").permitAll()
                 .antMatchers(HttpMethod.GET, "/mash-type").permitAll()
                 .antMatchers(HttpMethod.GET, "/recipe").hasAuthority("read:recipe")
                 .antMatchers(HttpMethod.POST, "/recipe").hasAuthority("create:recipe")
@@ -76,10 +77,11 @@ open class AuthConfig: WebSecurityConfigurerAdapter() {
                 .antMatchers(HttpMethod.POST, "/brew-setup").hasAuthority("create:brewsetup")
                 .antMatchers(HttpMethod.POST, "/mash-step").hasAuthority("create:mash-step")
                 .antMatchers(HttpMethod.POST, "/mash-type").hasAuthority("create:mash-type")
-                .antMatchers(HttpMethod.POST, "/malt").hasAuthority("create:malt")
-                .antMatchers(HttpMethod.POST, "/yeast").hasAuthority("create:yeast")
-                .antMatchers(HttpMethod.POST, "/hop").hasAuthority("create:hop")
+                .antMatchers(HttpMethod.POST, "/malt").hasAuthority("create:ingredient")
+                .antMatchers(HttpMethod.POST, "/yeast").hasAuthority("create:ingredient")
+                .antMatchers(HttpMethod.POST, "/hop").hasAuthority("create:ingredient")
                 .antMatchers(HttpMethod.POST, "/style").hasAuthority("create:style")
+                .antMatchers(HttpMethod.POST, "/misc").hasAuthority("create:ingredient")
                 .anyRequest().authenticated()
     }
 }

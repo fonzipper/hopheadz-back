@@ -218,4 +218,27 @@ open class IngredientRepository @Autowired constructor(val db: MongoDatabase, va
 
         return res.toTypedArray()
     }
+
+    fun findAllMisc() : Array<Misc> {
+        var res = listOf<Misc>()
+
+        db.getCollection("misc").find().distinct()
+                .forEach { it ->
+                    res = res.plus(serializer.fromMap(it.toSortedMap(), Misc::class.java))
+                }
+
+        return res.toTypedArray()
+    }
+
+    fun uploadMiscs(csv: String) {
+        val uploadArray = serializer.parseCSV(csv, Misc::class.java)
+
+        if (uploadArray.isNotEmpty())
+            uploadArray
+                    .filter { it.name != "" }
+                    .forEach {
+                        db.getCollection("misc")
+                                .insertOne(Document(serializer.toMap(it, Misc::class.java)))
+                    }
+    }
 }

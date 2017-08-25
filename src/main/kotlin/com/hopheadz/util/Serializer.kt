@@ -32,7 +32,11 @@ open class Serializer() {
                 "float" -> field.set(obj, map[field.name].toString().toFloat())
                 "int" -> field.set(obj, map[field.name].toString().toInt())
                 "boolean" -> field.set(obj, map[field.name].toString().toLowerCase() == "true")
-                "org.joda.time.DateTime" -> field.set(obj, DateTime.parse(map[field.name].toString()))
+                "org.joda.time.DateTime" -> {
+                    var dt = map[field.name].toString()
+                    if (dt == "null") dt = DateTime.now().toString()
+                    field.set(obj, DateTime.parse(dt))
+                }
                 else -> field.set(obj, field.type.cast(map[field.name]))
             }
         }
